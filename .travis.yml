@@ -1,0 +1,24 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t shahzade/docker-react -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true shahzade/docker-react npm run test
+
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'ap-south-1'
+  app: 'practice-docker'
+  env: 'Practice-docker-env'
+  bucket_name: 'elasticbeanstalk-ap-south-1-076887642694'
+  bucket_path: 'practice-docker'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
